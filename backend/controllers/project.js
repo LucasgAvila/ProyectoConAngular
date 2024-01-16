@@ -1,4 +1,7 @@
-var Project = require('../models/project')
+const { exists } = require('moongose/models/user_model');
+var Project = require('../models/project');
+var fs = require('fs');
+var path = require('path')
 
 var controller = {
 
@@ -16,7 +19,7 @@ var controller = {
 
     saveProject: function (req, res) {
         var project = new Project();
- 
+
         var params = req.body;
         project.name = params.name;
         project.description = params.description;
@@ -24,17 +27,17 @@ var controller = {
         project.year = params.year;
         project.langs = params.langs;
         project.image = null
- 
+
         project.save((err, prohectStored) => {
             if(err) return res.status(500).send({
                 message: 'Error al guardar el documento'
-            }) 
+            })
             if(!prohectStored) return res.status(404).send({
                 message: 'No se ha podido guardar el proyecto'
             })
             return res.status(200).send({project: prohectStored})
         })
-            
+
     },
         getProject: async function(req, res){
             var projectId = req.params.id;
@@ -45,22 +48,22 @@ var controller = {
                 try {
                 project = await Project.findById(projectId)
                 return res.status(200).send({project})
-            }   
+            }
                 catch (error) {
                 return res.status(404).send({
                     message: "El proyecto no existe"
                 })
             }
-            
+
         },
-        
+
         getProjects: function(req, res){
-            
+
             Project.find({}).sort('-year')
             .then((projects)=>{
 
                 if(!projects) return res.status(404).send({message: "No hay proyectos que mostrar..."});
-     
+
                 return res.status(200).send({message: "Proyectos ",
                                              projects});
             }).catch((err)=>{
@@ -71,7 +74,7 @@ var controller = {
         updateProject: function(req, res){
             var projectId = req.params.id;
             var update = req.body;
-     
+
             Project.findByIdAndUpdate(projectId, update)
             .then((projectUpdated)=>{
                 return res.status(200).send({
@@ -85,7 +88,7 @@ var controller = {
 
         deleteProject: function (req, res) {
             var projectId = req.params.id;
-     
+
             Project.findByIdAndDelete(projectId)
                 .then((Project) => {
                     return res.status(200).send({
@@ -101,19 +104,19 @@ var controller = {
             try {
                 const projectId = req.params.id;
                 const fileName = 'Imagen no subida';
-     
+
                 if (req.files && req.files.image) {
                     const filePath = req.files.image.path;
                     const fileSplit = filePath.split('/');
                     const fileNameNew = fileSplit[fileSplit.length - 1];
-     
-                    const updateImage = await 
+
+                    const updateImage = await
                     Project.findByIdAndUpdate(
                         projectId,
                         { image: fileNameNew },
                         { new: true }
                     );
-     
+
                     if (updateImage) {
                         return res.status(200).send({
                             files: fileNameNew,
@@ -132,6 +135,24 @@ var controller = {
             } catch (err) {
                 return res.status(500).send({ message: 'Error al llamar al método uploadImage' });
             }
+        },
+        getImageFile: async function(req,res){
+          try {
+            var file = req.params.image;
+            var path_file = './uploads/'+file;
+
+            fs.exists(path_file, (exists) => {
+              if(exists){
+                return res.sendFile(path.resolve(path_file));
+              } else {
+                return res.status(200).send({
+                  message: "No existe la imagen"
+                })
+              }
+            })
+          } catch (err) {
+
+          }
         }
 }
 

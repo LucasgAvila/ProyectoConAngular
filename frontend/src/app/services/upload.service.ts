@@ -10,10 +10,12 @@ export class UploadService{
     this.url = Global.url
   }
 
+  //peticion ajax para subir un archivo
+
   makeFileRequest(url : string, params: Array<string>, files: Array<File>, name : string){
     return new Promise(function(resolve, reject){
       var formData:any = new FormData()
-      var xhr = new XMLHttpRequest()
+      var xhr /*sinonimo de ajax*/ = new XMLHttpRequest() //tipo de peticion asincrona
       for(var i = 0; i < files.length; i++){
         formData.append(name, files[i], files[i].name)
       }

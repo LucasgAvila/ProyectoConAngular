@@ -23,7 +23,7 @@ export class CreateComponent {
     private _uploadService : UploadService
   ){
     this.title = "Crear proyecto"
-    this.project = new Project('', '', '', '', 2023, '', '')
+    this.project = new Project('', '', '', '', 2024, '', '')
     this.status = "";
     this.filesToUpload = []
 
@@ -31,7 +31,7 @@ export class CreateComponent {
   }
 
   onSubmit(form:any){
-    //Guardar los datos
+    //Guardar los datos del proyecto
     this._projectService.saveProject(this.project).subscribe({
       next: response => {
         if(response.project){
