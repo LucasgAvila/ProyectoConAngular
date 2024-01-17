@@ -146,6 +146,18 @@ article.about {
   padding: 50px;
   padding-top: 10px;
 }
+.container .image {
+  float: left;
+  width: 47%;
+}
+.container .image img{
+  width: 100%;
+}
+.container .data {
+  float: left;
+  width: 48%;
+  margin-left: 30px;
+}
 .container h2 {
   display: block;
   border-bottom: 1px solid #ccc;
@@ -169,7 +181,9 @@ form textarea {
   padding: 5px;
 }
 form button,
-form input [type='submit']{
+form input [type='submit'],
+.button-edit,
+.button-delete{
   display: block;
   font-size: 17px;
   padding:  10px;
@@ -179,6 +193,23 @@ form input [type='submit']{
   border: 1px solid rgba( 13, 67, 133, 1);
   cursor: pointer;
 }
+.button-edit,
+.button-delete{
+  width: 20%;
+  float: left;
+  margin-right: 10px;
+  text-decoration: none;
+}
+.button-edit {
+  background: orange;
+  border: none;
+}
+
+.button-delete{
+  background: red;
+  border: none
+}
+
 form button:hover,
 form input [type='submit']:hover{
 
@@ -235,4 +266,9 @@ form button [disabled] {
 
 .project img {
   width: 100%;
+}
+
+.project a {
+  text-decoration: none;
+  color: black;
 }
